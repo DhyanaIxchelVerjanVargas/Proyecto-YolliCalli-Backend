@@ -10,56 +10,45 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import proyecto.yollicalli.model.User;
+import proyecto.yollicalli.model.Usuario;
 import proyecto.yollicalli.service.UserService;
 
 @RestController
-@RequestMapping (path="/api/users/")
+@RequestMapping(path="/api/usuarios/") // Cambio de users a usuarios
 public class UserController {
 
 	private final UserService userService;
-	@Autowired //se generan aqui y se agrega el metodo a service
+	@Autowired
 	public UserController(UserService userService) {
 		this.userService=userService;
-	}//user controller
+	}
 	
 	@GetMapping
-	public ArrayList<User> getUsers() {
+	public ArrayList<Usuario> getUsers() {
 		return userService.getAllUsers();	
-	}//get users
+	}
 	
-	@GetMapping (path="{userId}")//http:localhost:8080/api/users/1
-	public User getUser(@PathVariable("userId") int userId) {
+	@GetMapping(path="{userId}")
+	public Usuario getUser(@PathVariable("userId") int userId) {
 		return userService.getUser(userId);
-	}//getProduct|
+	}
 	
 	@PostMapping
-	public User addProduct(@RequestBody User product) {
-		return userService.addUser(product);
-	}//adduser
+	public Usuario addUser(@RequestBody Usuario usuario) {
+		return userService.addUser(usuario);
+	}
 	
-	@DeleteMapping (path="{userId}")
-	public User deleteUser(@PathVariable("userId") int userId) {
+	@DeleteMapping(path="{userId}")
+	public Usuario deleteUser(@PathVariable("userId") int userId) {
 		return userService.deleteUser(userId);
-	}//delete
+	}
+	
 	@PutMapping(path="{userId}")
-	public User updateUser(@PathVariable("userId") int userId,
-			@RequestBody User user) {
-		return userService.updateUser(userId, user.getName(), user.getEmail(), user.getPhone(), user.getPassword());
-	}//put
-//	@PutMapping(path="{userId}")
-//	public User updateUser(@PathVariable("userId") int userId,
-//			@RequestParam (required=false) String name, 
-//			@RequestParam (required=false) String email, 
-//			@RequestParam (required=false) String phone,
-//			@RequestParam (required=false) String password) {
-//		return userService.updateUser(userId, name, email, phone, password);
-//	}//put
-}//class ProductController
-	
-	
-	
+	public Usuario updateUser(@PathVariable("userId") int userId,
+			@RequestBody Usuario usuario) {
+		return userService.updateUser(userId, usuario.getNombre(), usuario.getEmail(), usuario.getTelefono(), usuario.getContrasena());
+	}
+}
 

@@ -4,74 +4,71 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
-import proyecto.yollicalli.model.User;
-
-
+import proyecto.yollicalli.model.Usuario; // Cambio de User a Usuario
 
 @Service
 public class UserService {
 	
-	public final ArrayList<User> list = new ArrayList<User>();
+	public final ArrayList<Usuario> list = new ArrayList<Usuario>(); // Cambio de User a Usuario
 	
 	public UserService() {
-		list.add( new User("Edgar Benitez","edgar@gmail.com","5555555555", "12345678"));
-		list.add( new User("Jetsael Villegaz","jetsa@gmail.com","6666666666", "87654321"));
-		list.add( new User("Nadia Martinez","nadia@gmail.com","7777777777", "24681357"));
-		list.add( new User("Ollin Ollin","ollin@gmail.com","8888888888", "13572468"));
-	
+		list.add(new Usuario("Edgar Benitez","edgar@gmail.com","5555555555", "12345678")); // Cambio de User a Usuario
+		list.add(new Usuario("Jetsael Villegaz","jetsa@gmail.com","6666666666", "87654321")); // Cambio de User a Usuario
+		list.add(new Usuario("Nadia Martinez","nadia@gmail.com","7777777777", "24681357")); // Cambio de User a Usuario
+		list.add(new Usuario("Ollin Ollin","ollin@gmail.com","8888888888", "13572468")); // Cambio de User a Usuario
 	}
 	
-	public ArrayList<User> getAllUsers() {
+	public ArrayList<Usuario> getAllUsers() {
 		return list;
-	}//get users
-
-
-	
-	public User getUser(int userId) {
-		User tmpUser = null; //tmp= temporal
-		for (User user : list) {
-			if(user.getId()==userId) {
-				tmpUser=user;
-				break;
-			}// if ==
-		}//foreach
-		return tmpUser;
-	}//get user
-
-	public User addUser(User user) {
-		User tmpUser=null;
-		if(list.add(user)){
-			tmpUser=user;
-		}//if
-		return tmpUser;
 	}
 
-	public User deleteUser(int userId) {
-		User tmpUser = null;
-		for (User user : list) {
-			if(user.getId()==userId) {
-				tmpUser=user;
-				list.remove(tmpUser);//borra el producto en la lista
+	public Usuario getUser(int userId) {
+		Usuario tmpUsuario = null;
+		for (Usuario usuario : list) {
+			if(usuario.getId()==userId) {
+				tmpUsuario=usuario;
 				break;
-			}// if ==
-		}//foreach
-		return tmpUser;
-	}//delete
+			}
+		}
+		return tmpUsuario;
+	}
 
-	public User updateUser(int userId, String name, String email, String phone, String password) {
-		User tmpUser = null;
-		for (User user : list) {
-			if(user.getId()==userId) {
-				tmpUser=user;
-				if (name.length()!=0) user.setName(name);
-				if (email.length()!=0) user.setEmail(email);
-				if (phone.length()!=0) user.setPhone(phone);
-				if (password.length()!=0) user.setPassword(password);
+	public Usuario addUser(Usuario usuario) {
+		Usuario tmpUsuario = null;
+		if(list.add(usuario)){
+			tmpUsuario=usuario;
+		}
+		return tmpUsuario;
+	}
+
+	public Usuario deleteUser(int userId) {
+		Usuario tmpUsuario = null;
+		for (Usuario usuario : list) {
+			if(usuario.getId()==userId) {
+				tmpUsuario=usuario;
+				list.remove(tmpUsuario);
 				break;
-			}// if ==
-		}//foreach
-		return tmpUser;
-	}//put
+			}
+		}
+		return tmpUsuario;
+	}
+
+	public Usuario updateUser(int userId, String nombre, String email, String telefono, String contrasena) {
+		Usuario tmpUsuario = null;
+		for (Usuario usuario : list) {
+			if(usuario.getId()==userId) {
+				tmpUsuario=usuario;
+				if (nombre.length()!=0) usuario.setNombre(nombre);
+				if (email.length()!=0) usuario.setEmail(email);
+				if (telefono.length()!=0) usuario.setTelefono(telefono);
+				if (contrasena.length()!=0) usuario.setContrasena(contrasena);
+				break;
+			}
+		}
+		return tmpUsuario;
+	}
+}
+
 //	public User updateUser(int userId, String name, String email, String phone, String password) {
 //		User tmpUser = null;
 //		for (User user : list) {
@@ -92,4 +89,4 @@ public class UserService {
 
 
 
-}
+
