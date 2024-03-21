@@ -10,4 +10,4 @@ public class YollicalliApplication {
 		SpringApplication.run(YollicalliApplication.class, args);
 	}//main
 
-}//Yollicalli app
+}
