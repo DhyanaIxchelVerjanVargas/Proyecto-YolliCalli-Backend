@@ -51,4 +51,3 @@ public class UserController {
 		return userService.updateUser(userId, usuario.getNombre(), usuario.getEmail(), usuario.getTelefono(), usuario.getContrasena());
 	}
 }
-
