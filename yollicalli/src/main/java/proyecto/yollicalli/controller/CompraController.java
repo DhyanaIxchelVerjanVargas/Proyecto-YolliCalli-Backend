@@ -1,6 +1,7 @@
 package proyecto.yollicalli.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,12 +29,12 @@ public class CompraController {
 	
 	//GET
 	@GetMapping
-	public ArrayList<Compra> getCompras() {
+	public List<Compra> getCompras() {
 		return compraService.getAllCompras();
 	}
 	
 	@GetMapping (path="{compraId}")
-	public Compra getCompra(@PathVariable("compraId")int compraId) {
+	public Compra getCompra(@PathVariable("compraId")Long compraId) {
 		return compraService.getCompra(compraId);
 	}
 	
@@ -45,13 +46,13 @@ public class CompraController {
 	
 	//DELETE
 	@DeleteMapping (path="{compraId}")
-	public Compra deleteCompra(@PathVariable("compraId") int compraId) {
+	public Compra deleteCompra(@PathVariable("compraId") Long compraId) {
 		return compraService.deleteCompra(compraId);
 	}
 	
 	//PUT
 	@PutMapping (path="{compraId}")
-	public Compra updateCompra(@PathVariable("compraId") int compraId,
+	public Compra updateCompra(@PathVariable("compraId") Long compraId,
 			@RequestBody Compra compra) {
 		return compraService.updateCompra(compraId, Double.valueOf(compra.getSubtotal()),Double.valueOf(compra.getEnvio()));
 	}
