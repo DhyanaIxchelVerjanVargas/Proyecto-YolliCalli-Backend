@@ -1,6 +1,8 @@
 package proyecto.yollicalli.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.springframework.stereotype.Service;
 
@@ -37,51 +39,105 @@ public class ProductoService {
 			}
 		}
 		return tmpProd;
-	}
+	}//getProducto
 	
 	public ArrayList<Producto> getAllProductos(){
 		return lista;
-	}
+	}//getAllProductos
 	
-	public ProductosResponse getAllProductos(int pagina) {
-		int tamanio = lista.size();
-        int productosPorPagina = 12;
-        int inicio = (pagina - 1) * productosPorPagina;
-        int fin = Math.min(inicio + productosPorPagina, lista.size());
-        ArrayList<Producto> productosPagina = new ArrayList<Producto>(lista.subList(inicio, fin));
-        int paginas = (int) Math.ceil((double) tamanio / productosPorPagina);
-        return new ProductosResponse(productosPagina, tamanio, paginas);
-	}
+	public ArrayList<Producto> ordenProductosPrecio(ArrayList<Producto> productos, String orden) {
+		
+		if (orden.equals("ASC")) {
+	        Collections.sort(productos, Comparator.comparingDouble(Producto::getPrecio));
+	    } else if (orden.equals("DESC")) {
+	        Collections.sort(productos, Comparator.comparingDouble(Producto::getPrecio).reversed());
+	    }
+	    return productos;
+    }//ordenProductosPrecio
 	
-    public ProductosResponse getProductosBuscar(int pagina, String buscar) {
-        int productosPorPagina = 12;
-        ArrayList<Producto> productosCoincidentes = new ArrayList<>();
-        String[] palabrasClave = buscar.split("_");
+
+	public ArrayList<Producto> ordenProductosNombre(ArrayList<Producto> productos, String orden) {
+
+		if (orden.equals("ASC")) {
+	        Collections.sort(productos, Comparator.comparing(Producto::getNombreProducto));
+	    } else if (orden.equals("DESC")) {
+	        Collections.sort(productos, Comparator.comparing(Producto::getNombreProducto).reversed());
+	    }
+	    return productos;
+    }//ordenProductosNombre
+	
+	public ArrayList<Producto> filtrarCategorias(ArrayList<Producto> productos, String categorias) {
+        String[] categoriasArray = categorias.split("_");
+        int[] categoriasInt = new int[categoriasArray.length];
+        ArrayList<Producto> productosFiltrados = new ArrayList<>();
+
+        for (int i = 0; i < categoriasArray.length; i++) {
+            categoriasInt[i] = Integer.parseInt(categoriasArray[i]);
+        }
         
-        for (Producto producto : lista) {
+        if(categoriasInt.length == 1 && categoriasInt[0]==0) {
+        	return productos;
+        }
+
+        for (Producto producto : productos) {
+            boolean perteneceACategoria = false;
+            for (int idCategoria : categoriasInt) {
+                if (idCategoria == producto.getIdCategoria()) {
+                    perteneceACategoria = true;
+                    break;
+                }
+            }
+            if (perteneceACategoria) {
+                productosFiltrados.add(producto);
+            }
+        }
+
+        return productosFiltrados;
+    }//filtrarCategorias
+	
+	public ArrayList<Producto> filtrarPrecios(ArrayList<Producto> productos, Double precioMenor, Double precioMayor) {
+        ArrayList<Producto> productosFiltrados = new ArrayList<>();
+
+        for (Producto producto : productos) {
+            if (producto.getPrecio() >= precioMenor && producto.getPrecio() <= precioMayor) {
+                productosFiltrados.add(producto);
+            }
+        }
+
+        return productosFiltrados;
+    }//filtrarPrecios
+	
+	public ArrayList<Producto> getProductosBuscar(ArrayList<Producto> productos, String buscar) {
+        String[] palabrasClave = buscar.split("_");
+        ArrayList<Producto> productosCoincidentes = new ArrayList<>();
+        
+        for (Producto producto : productos) {
             for (String palabra : palabrasClave) {
                 if (producto.getNombreProducto().toLowerCase().contains(palabra.toLowerCase())) {
-                    productosCoincidentes.add(producto);
+                	productosCoincidentes.add(producto);
                     break;
                 }
             }
         }
-        
-        int inicio = (pagina - 1) * productosPorPagina;
-        int fin = Math.min(inicio + productosPorPagina, productosCoincidentes.size());
-        ArrayList<Producto> productosPagina = new ArrayList<Producto>(productosCoincidentes.subList(inicio, fin));
-        int tamanio = productosCoincidentes.size();
-        int paginas = (int) Math.ceil((double) tamanio / productosPorPagina);
-        
-        return new ProductosResponse(new ArrayList<>(productosPagina), tamanio, paginas);
-    }
+        return productosCoincidentes;
+    }//getProductosBuscar
     
+	public ProductosResponse productosPaginacion(ArrayList<Producto> productos,int pagina) {
+		int tamanio = productos.size();
+        int productosPorPagina = 12;
+        int inicio = (pagina - 1) * productosPorPagina;
+        int fin = Math.min(inicio + productosPorPagina, productos.size());
+        ArrayList<Producto> productosPagina = new ArrayList<Producto>(productos.subList(inicio, fin));
+        int paginas = (int) Math.ceil((double) tamanio / productosPorPagina);
+        return new ProductosResponse(productosPagina, tamanio, paginas);
+	}//productosPaginacion
+	
     public Producto addProducto(Producto producto) {
     	Producto tmpProducto=null;
     	if(lista.add(producto)) {
     		tmpProducto = producto;
     	}
     	return tmpProducto;
-    }
+    }//addProducto
 
 }
