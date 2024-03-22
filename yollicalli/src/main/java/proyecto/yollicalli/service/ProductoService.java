@@ -6,8 +6,8 @@ import java.util.Comparator;
 
 import org.springframework.stereotype.Service;
 
+import proyecto.yollicalli.dto.ProductosResponse;
 import proyecto.yollicalli.model.Producto;
-import proyecto.yollicalli.model.ProductosResponse;
 
 @Service
 public class ProductoService {

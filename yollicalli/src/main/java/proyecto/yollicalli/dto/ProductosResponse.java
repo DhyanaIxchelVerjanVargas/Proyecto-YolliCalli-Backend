@@ -1,6 +1,8 @@
-package proyecto.yollicalli.model;
+package proyecto.yollicalli.dto;
 
 import java.util.ArrayList;
+
+import proyecto.yollicalli.model.Producto;
 
 public class ProductosResponse {
 	private ArrayList<Producto>productos = new ArrayList<Producto>();

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import proyecto.yollicalli.dto.ProductosResponse;
 import proyecto.yollicalli.model.Producto;
-import proyecto.yollicalli.model.ProductosResponse;
 import proyecto.yollicalli.service.ProductoService;
 
 @RestController
