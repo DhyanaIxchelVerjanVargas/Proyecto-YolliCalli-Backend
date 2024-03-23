@@ -1,6 +1,6 @@
 package proyecto.yollicalli.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,12 +26,12 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public ArrayList<Usuario> getUsers() {
+	public List<Usuario> getUsers() {
 		return userService.getAllUsers();	
 	}
 	
 	@GetMapping(path="{userId}")
-	public Usuario getUser(@PathVariable("userId") int userId) {
+	public Usuario getUser(@PathVariable("userId") Long userId) {
 		return userService.getUser(userId);
 	}
 	
@@ -41,13 +41,13 @@ public class UserController {
 	}
 	
 	@DeleteMapping(path="{userId}")
-	public Usuario deleteUser(@PathVariable("userId") int userId) {
+	public Usuario deleteUser(@PathVariable("userId") Long userId) {
 		return userService.deleteUser(userId);
 	}
 	
 	@PutMapping(path="{userId}")
-	public Usuario updateUser(@PathVariable("userId") int userId,
+	public Usuario updateUser(@PathVariable("userId") Long userId,
 			@RequestBody Usuario usuario) {
-		return userService.updateUser(userId, usuario.getNombre(), usuario.getEmail(), usuario.getTelefono(), usuario.getContrasena());
+		return userService.updateUser(userId, usuario.getNombre(), usuario.getCorreo(), usuario.getTelefono(), usuario.getContrasenia());
 	}
 }
