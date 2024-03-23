@@ -1,14 +1,29 @@
 package proyecto.yollicalli.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="direcciones")
 public class Direccion {
-	
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name="id", unique=true, nullable=false)
+	private Long id;
+	@Column(nullable=false)
 	private String calle;
+	@Column(nullable=false)
 	private String municipio_alcaldia;
+	@Column(nullable=false)
 	private String estado;
+	@Column(nullable=true)
 	private String ciudad;
+	@Column(nullable=false)
 	private String cp;
-	private int id;
-	private static int total=0;
 	
 	public Direccion(String calle, String municipio_alcaldia, String estado, String ciudad, String cp) {
 		super();
@@ -17,16 +32,11 @@ public class Direccion {
 		this.estado = estado;
 		this.ciudad = ciudad;
 		this.cp = cp;
-		Direccion.total++;
-		id=Direccion.total;
 	}//Constructor
 	
-	public Direccion() {
-		Direccion.total++;
-		id=Direccion.total;
-	}//constructor vacío
+	public Direccion() {}//constructor vacío
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}//getId
 
@@ -72,8 +82,8 @@ public class Direccion {
 
 	@Override
 	public String toString() {
-		return "Direccion [calle=" + calle + ", municipio_alcaldia=" + municipio_alcaldia + ", estado=" + estado
-				+ ", ciudad=" + ciudad + ", cp=" + cp + ", id=" + id + "]";
-	}
-
+		return "Direccion [id=" + id + ", calle=" + calle + ", municipio_alcaldia=" + municipio_alcaldia + ", estado="
+				+ estado + ", ciudad=" + ciudad + ", cp=" + cp + "]";
+	}//toString
+	
 }//class Direccion
