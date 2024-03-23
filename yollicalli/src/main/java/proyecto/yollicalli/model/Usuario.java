@@ -1,68 +1,72 @@
 package proyecto.yollicalli.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "usuario")
 public class Usuario {
 
-	private String nombre;
-	private String email;
-	private String telefono;
-	private String contrasena;
-	private int id;
-	private static int total=0;
-
-	public Usuario(String nombre, String email, String telefono, String contrasena) {
-		super();
-		this.nombre = nombre;
-		this.email = email;
-		this.telefono = telefono;
-		this.contrasena = contrasena;
-		Usuario.total++;
-		id=Usuario.total;
-	}//constructor
-
-	public Usuario() {
-		Usuario.total++;
-		id=Usuario.total;
-	}//constructor vacio
-
-	public int getId() {
-		return id;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
-	public String getContrasena() {
-		return contrasena;
-	}
-
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
-	}//getters and setters
-
-	@Override
-	public String toString() {
-		return "Usuario [nombre=" + nombre + ", email=" + email + ", telefono=" + telefono + ", contrasena=" + contrasena
-				+ ", id=" + id + "]";
-	}//tostring
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private int id;
+    @Column(nullable = false)
+    private String nombre;
+    @Column(nullable = false)
+    private String correo;
+    @Column(nullable = false)
+    private String telefono;
+    @Column(nullable = false)
+    private String contrasenia;
+   //private static int total = 0;
+    public Usuario(String nombre, String correo, String telefono, String contrasenia) {
+        super();
+        this.nombre = nombre;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.contrasenia = contrasenia;
+      //  Usuario.total++;
+       // id = Usuario.total;
+    }
+    public Usuario() {
+    //    Usuario.total++;
+      //  id = Usuario.total;
+    }
+    public int getId() {
+        return id;
+    }
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    public String getCorreo() {
+        return correo;
+    }
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+    public String getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    public String getContrasenia() {
+        return contrasenia;
+    }
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+    @Override
+    public String toString() {
+        return "Usuario [nombre=" + nombre + ", correo=" + correo + ", telefono=" + telefono + ", contrasenia=" + contrasenia
+                + ", id=" + id + "]";
+    }
 }
