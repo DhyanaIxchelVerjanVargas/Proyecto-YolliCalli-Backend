@@ -2,29 +2,37 @@ package proyecto.yollicalli.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+@Entity
+@Table(name="resumen_pedido")
 public class ResumenPedido {
 	/*Propiedades*/
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name="idResumen", unique=true, nullable=false)
+	private Long idResumen;
+	
+	@Column(name="fechaPedido", nullable=false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
 	private Date fechaPedido;
+	
+	@Column(name="estadoPedido", length=20, nullable=false)
 	private String estadoPedido;
-	private int idResumen;
-	private static int total=0;
 	
 	/*Constructores*/
 	public ResumenPedido(Date fechaPedido, String estadoPedido) {
-		super();
 		this.fechaPedido = fechaPedido;
 		this.estadoPedido = estadoPedido;
-		ResumenPedido.total++;
-		idResumen = ResumenPedido.total;
 	}
-
-	public ResumenPedido() {
-		ResumenPedido.total++;
-		idResumen = ResumenPedido.total;
-	}
+	public ResumenPedido() {}
 
 	public Date getFecha() {
 		return fechaPedido;
@@ -42,7 +50,7 @@ public class ResumenPedido {
 		this.estadoPedido = estado;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return idResumen;
 	}
 
