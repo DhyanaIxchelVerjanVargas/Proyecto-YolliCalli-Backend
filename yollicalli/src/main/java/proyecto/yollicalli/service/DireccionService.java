@@ -1,76 +1,49 @@
 package proyecto.yollicalli.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import proyecto.yollicalli.model.Direccion;
+import proyecto.yollicalli.repository.DireccionRepository;
 
 @Service
 public class DireccionService {
 	
-	public final ArrayList<Direccion> list = new ArrayList<Direccion>();
-	
-	public DireccionService() {
-		
-		list.add(new Direccion("Tata Jesucristo", "San Antonio, Iztapalapa", "CDMX", "CDMX", "09900"));
-		list.add(new Direccion("Cuitláhuac", "San Lorenzo, Xochimilco", "CDMX", "CDMX", "09800"));
-		list.add(new Direccion("Juan Escutia", "San Miguel, Texcoco", "Estado de México", "Estado de México", "09900"));
-		list.add(new Direccion("Guillermo Prieto", "Barranca del Muerto, La Piedad", "Colima", "Colima", "09900"));
+	public final DireccionRepository direccionRepository;
+	@Autowired
+	public DireccionService(DireccionRepository direccionRepository) {
+		this.direccionRepository = direccionRepository;
 	}//DireccionService
 
-	public ArrayList<Direccion> getAllDirecciones() {
-
-		return list;
+	public List<Direccion> getAllDirecciones() {
+		return direccionRepository.findAll();
 	}//getAllDirecciones
 
-	public Direccion getDireccion(int direccionId) {
-		Direccion tmpDireccion = null;
-		for (Direccion direccion : list) {
-			if(direccion.getId()==direccionId) {
-				tmpDireccion=direccion;
-				break;
-			}// if ==
-		}//foreach
-		return tmpDireccion;
+	public Direccion getDireccion(Long direccionId) {
+		return direccionRepository.findById(direccionId).orElseThrow(
+				()-> new IllegalArgumentException("La dirección con el id [" +
+		direccionId + "] no existe"));
 	}//getDireccion
 
 	public Direccion addDireccion(Direccion direccion) {
-		Direccion tmpDireccion=null;
-		if(list.add(direccion)){
-			tmpDireccion=direccion;
-		}//if
-		return tmpDireccion;
+		Direccion tmpDireccion = null;
+		tmpDireccion = direccionRepository.save(direccion);
+			return tmpDireccion;
+		
 	}//addDireccion
 
-	public Direccion deleteDireccion(int direccionId) {
+	public Direccion deleteDireccion(Long direccionId) {
 		Direccion tmpDireccion = null;
-		for (Direccion direccion : list) {
-			if(direccion.getId()==direccionId) {
-				tmpDireccion=direccion;
-				list.remove(tmpDireccion);
-				break;
-			}// if ==
-		}//foreach
+		if(direccionRepository.existsById(direccionId)) {
+		tmpDireccion = direccionRepository.findById(direccionId).get();
+		direccionRepository.deleteById(Long.valueOf(direccionId));
+		}//if
 		return tmpDireccion;
-	}
+	}//deleteDireccion
 
-	public Direccion updateDireccion(int direccionId, String calle, String municipio_alcaldia, String estado,
-			String ciudad, String cp) {
-		Direccion tmpDireccion = null;
-		for (Direccion direccion : list) {
-			if(direccion.getId()==direccionId) {
-				tmpDireccion=direccion;
-				if (calle.length()!=0) direccion.setCalle(calle);
-				if (municipio_alcaldia.length()!=0) direccion.setMunicipio_alcaldia(municipio_alcaldia);
-				if (estado.length()!=0) direccion.setEstado(estado);
-				if (ciudad.length()!=0) direccion.setCiudad(ciudad);
-				if (cp.length()!=0) direccion.setCp(cp);
-				break;
-			}// if ==
-		}//foreach
-		
-		return tmpDireccion;
-	}//updateDireccion
 	
 }//class DireccionService

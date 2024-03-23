@@ -1,16 +1,19 @@
 package proyecto.yollicalli.controller;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RestController;
+
 
 import proyecto.yollicalli.model.Direccion;
 import proyecto.yollicalli.service.DireccionService;
@@ -27,12 +30,12 @@ public class DireccionController {
 	
 	//GET
 	@GetMapping
-	public ArrayList<Direccion> getDirecciones(){
+	public List<Direccion> getDirecciones(){
 		return direccionService.getAllDirecciones();
 	}//getDirecciones
 	
 	@GetMapping (path="{direccionId}")
-	public Direccion getDireccion(@PathVariable("direccionId") int direccionId) {
+	public Direccion getDireccion(@PathVariable("direccionId") Long direccionId) {
 		return direccionService.getDireccion(direccionId);
 	}//getDireccion
 	
@@ -44,16 +47,8 @@ public class DireccionController {
 	
 	//DELETE
 	@DeleteMapping (path="{direccionId}")
-	public Direccion deleteDireccion(@PathVariable("direccionId") int direccionId) {
+	public Direccion deleteDireccion(@PathVariable("direccionId") Long direccionId) {
 		return direccionService.deleteDireccion(direccionId);
 	}//delete
 	
-	//PUT
-	@PutMapping(path="{direccionId}")
-	public Direccion updateDireccion(@PathVariable("direccionId") int direccionId,
-			@RequestBody Direccion direccion) {
-		return direccionService.updateDireccion(direccionId, direccion.getCalle(), 
-				direccion.getMunicipio_alcaldia(), direccion.getEstado(), 
-				direccion.getCiudad(), direccion.getCp());
-	}//put
 }//DireccionController
