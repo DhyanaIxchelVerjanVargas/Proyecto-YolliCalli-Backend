@@ -1,72 +1,59 @@
 package proyecto.yollicalli.service;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import proyecto.yollicalli.model.ResumenPedido;
+import proyecto.yollicalli.repository.ResumenPedidoRepository;
 
 @Service
 public class ResumenPedidoService {
-	public final ArrayList<ResumenPedido> listaPedidos = new ArrayList<ResumenPedido>();
+private final ResumenPedidoRepository resumenPedidoRepository;
 	
-	public ResumenPedidoService() {
-		
-		listaPedidos.add( new ResumenPedido(new Date(), "En proceso") );
-		listaPedidos.add( new ResumenPedido(new Date(), "En proceso") );
-		listaPedidos.add( new ResumenPedido(new Date(), "Enviado") );
-		listaPedidos.add( new ResumenPedido(new Date(), "Entregado") );
-		
+	@Autowired
+	public ResumenPedidoService(ResumenPedidoRepository resumenPedidoRepository) {
+		this.resumenPedidoRepository = resumenPedidoRepository;
 	}//constructor
 	
-	public ArrayList<ResumenPedido> getResumenes() {
-		return listaPedidos;
+	public List<ResumenPedido> getResumenes() {
+		return resumenPedidoRepository.findAll();
 	}
 
-	public ResumenPedido getResumen(int pedidoId) {
-		ResumenPedido resumenTemporal = null;
-		for (ResumenPedido resumen : listaPedidos) {
-			if(resumen.getId() == pedidoId) {
-				resumenTemporal = resumen;
-				break;
-			}
-		}
-		return resumenTemporal;
+	public ResumenPedido getResumen(Long pedidoId) {
+		return resumenPedidoRepository.findById(pedidoId).orElseThrow(
+				() -> new IllegalArgumentException("El resumen de pedido con el id [" +
+						pedidoId + "] no existe")
+			);
 	}
 
 	public ResumenPedido addResumen(ResumenPedido resumenPedido) {
 		ResumenPedido resumenTemporal = null;
-		if(listaPedidos.add(resumenPedido)) {
-			resumenTemporal = resumenPedido;
-		}
+		resumenTemporal = resumenPedidoRepository.save(resumenPedido);
+			
 		return resumenTemporal;
 	}
 
-	public ResumenPedido updateResumen(int pedidoId, String estadoPedido) {
-		ResumenPedido resumenTemporal = null;
-		for (ResumenPedido resumen : listaPedidos) {
-			if(resumen.getId() == pedidoId) {
-				if(estadoPedido != null) resumen.setEstado(estadoPedido);
-				resumenTemporal = resumen;
-				break;
-			}
+	public ResumenPedido updateResumen(Long pedidoId, String estadoPedido) {
+		ResumenPedido resumenPedido = null;
+		if(resumenPedidoRepository.existsById(pedidoId)) {
+			resumenPedido = resumenPedidoRepository.findById(pedidoId).get();
+			if(estadoPedido.length() != 0) resumenPedido.setEstado(estadoPedido);
+			resumenPedidoRepository.save(resumenPedido);
 		}
-		return resumenTemporal;
+		return resumenPedido;
 	}
 
-	public ResumenPedido deleteResumen(int pedidoId) {
+	public ResumenPedido deleteResumen(Long pedidoId) {
 		ResumenPedido resumenTemporal = null;
-		for (ResumenPedido resumen : listaPedidos) {
-			if(resumen.getId() == pedidoId) {
-				resumenTemporal = resumen;
-				listaPedidos.remove(resumen);
-				break;
-			}
+		if(resumenPedidoRepository.existsById(pedidoId)) {
+			resumenTemporal = resumenPedidoRepository.findById(pedidoId).get();
+			resumenPedidoRepository.deleteById(pedidoId);
 		}
 		return resumenTemporal;
+		
 	}
 
 	
-
 }
