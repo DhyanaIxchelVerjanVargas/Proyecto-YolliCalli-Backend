@@ -1,6 +1,6 @@
 package proyecto.yollicalli.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ public class TiendaController {
 			@RequestParam (required=false) Double precioMenor,
 			@RequestParam (required=false) Double precioMayor,
 			@RequestParam (required=true) int pagina){
-		ArrayList<Producto> tmpProductos =  null;
+		List<Producto> tmpProductos =  null;
 		tmpProductos = productoService.getAllProductos();
 
 		if(ordenPrecio != null) {
