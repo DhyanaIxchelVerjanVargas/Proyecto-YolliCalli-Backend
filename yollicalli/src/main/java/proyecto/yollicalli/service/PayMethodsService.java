@@ -1,71 +1,82 @@
 package proyecto.yollicalli.service;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import proyecto.yollicalli.dto.ChangePaymentMethod;
 import proyecto.yollicalli.model.PaymentMethod;
+import proyecto.yollicalli.repository.PaymentMethodRepository;
 
 @Service
 public class PayMethodsService {
 
-public final ArrayList<PaymentMethod> list = new ArrayList<PaymentMethod>();
+	private final PaymentMethodRepository paymentMethodRepository;
 	
-	public PayMethodsService() {
-		list.add( new PaymentMethod("TDC"));
-		list.add( new PaymentMethod("Paypal"));
-		list.add( new PaymentMethod("Oxxo"));
-		list.add( new PaymentMethod("TDC"));		
+	@Autowired
+	public PayMethodsService(PaymentMethodRepository paymentMethodRepository) {
+			this.paymentMethodRepository = paymentMethodRepository;
 		}
 	
-	public ArrayList<PaymentMethod> getAllPayMethods() {
+	public List<PaymentMethod> getAllPayMethods() {
 		// TODO Auto-generated method stub
-		return list;
-	}
+		return paymentMethodRepository.findAll();
+	}//getAll
 
-	public PaymentMethod getPayDetails(int purchaseId) {
+	public PaymentMethod getPaymentMethod(Long purchaseId) {
 		// TODO Auto-generated method stub
-		PaymentMethod tmpMethod = null;
-		for (PaymentMethod paymentMethod : list) {
-			if (purchaseId == paymentMethod.getId()) {
-				tmpMethod = paymentMethod;
-				break;
-			}
-		}
-		return tmpMethod;
-	}
+		return paymentMethodRepository.findById(purchaseId).orElseThrow(
+				()-> new IllegalArgumentException("El método de pago con el id ["+purchaseId+"] no existe.")
+				);
+	}//get(Single)
 	
 	public PaymentMethod addPaymentMethod(PaymentMethod paymentMethod) {
 		// TODO Auto-generated method stub
-		PaymentMethod tmpMethod = null;
-		if (list.add(paymentMethod)) {
-			tmpMethod = paymentMethod;
+		Optional<PaymentMethod> tmpPayment = paymentMethodRepository.findById(paymentMethod.getId());
+		if (tmpPayment.isEmpty()) {
+			return paymentMethodRepository.save(paymentMethod);
+		}else {
+			System.out.println("Ya existe el método de pago con la id ["+paymentMethod.getId()+"]");
+			return null;
 		}
-		return tmpMethod;
-	}
+	}//addPaymentMethod
 
-	public PaymentMethod deletePaymentMethod(int purchaseId) {
+	public PaymentMethod deletePaymentMethod(Long purchaseId) {
 		// TODO Auto-generated method stub
 		PaymentMethod tmpMethod = null;
-		for (PaymentMethod paymentMethod : list) {
-			if (purchaseId == paymentMethod.getId()) {
-				tmpMethod = paymentMethod;
-				list.remove(paymentMethod);
-				break;
-			}
+		if (paymentMethodRepository.existsById(purchaseId)) {
+			tmpMethod =  paymentMethodRepository.findById(purchaseId).get();
+			paymentMethodRepository.deleteById(purchaseId);
 		}
 		return tmpMethod;
-	}
+	}//deletePaymentMethod
 
-	public PaymentMethod updatePaymentMethod(int purchaseId, String method) {
+	public PaymentMethod updatePaymentMethod(Long purchaseId, String method) {
 		// TODO Auto-generated method stub
 		PaymentMethod tmpMethod = null;
-		for (PaymentMethod paymentMethod : list) {
-			if (purchaseId == paymentMethod.getId()) {
-				tmpMethod = paymentMethod;
-				if (method!=null) paymentMethod.setNombreMetodo(method);
-				break;
-			}
+		if (paymentMethodRepository.existsById(purchaseId)) {
+			tmpMethod =  paymentMethodRepository.findById(purchaseId).get();
+				if(method != "") tmpMethod.setNombreMetodo(method);
+				tmpMethod = paymentMethodRepository.save(tmpMethod);
+		}//foreach
+		return tmpMethod;
+	}
+	
+	public PaymentMethod updatePaymentMethod(Long purchaseId, ChangePaymentMethod changePaymentMethod) {
+		// TODO Auto-generated method stub
+		PaymentMethod tmpMethod=null;
+		if(paymentMethodRepository.existsById(purchaseId)) {
+			tmpMethod= paymentMethodRepository.findById(purchaseId).get();
+			if(tmpMethod.getNombreMetodo()==changePaymentMethod.getPaymentMethod()) 
+			{
+				tmpMethod.setNombreMetodo(changePaymentMethod.getnPaymentMethod());
+				paymentMethodRepository.save(tmpMethod);
+			} else{
+				System.out.println("updatePaymentMethod - El método de pago ["+ tmpMethod.getId() +"] no coincide");
+				tmpMethod = null;
+			};
 		}
 		return tmpMethod;
 	}

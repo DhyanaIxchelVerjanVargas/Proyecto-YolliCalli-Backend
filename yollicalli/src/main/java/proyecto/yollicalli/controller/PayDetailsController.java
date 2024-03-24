@@ -1,6 +1,6 @@
 package proyecto.yollicalli.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,18 +17,23 @@ import proyecto.yollicalli.service.PayDetailsService;
 
 @RestController
 @RequestMapping(path="/api/detallesDePago")
-public class payDetailsController {
+public class PayDetailsController {
 	
 	private final PayDetailsService payDetailsService;
 	
 	@Autowired
-	public payDetailsController(PayDetailsService payDetailsService) {
+	public PayDetailsController(PayDetailsService payDetailsService) {
 		this.payDetailsService = payDetailsService;
 	}
 
-	@GetMapping
-	public ArrayList<PayDetails> getPayDetails() {
+	@GetMapping 
+	public List<PayDetails> getAllPayDetails() {
 		return payDetailsService.getAllPayDetails();
+	}
+	
+	@GetMapping (path="{purchaseId}")
+	public PayDetails getPayDetails(@PathVariable ("purchaseId") Long purchaseId) {
+		return payDetailsService.getPayDetails(purchaseId);
 	}
 	
 	//POST
@@ -39,14 +44,15 @@ public class payDetailsController {
 	
 	//PUT
 	@PutMapping (path="{purchaseId}")
-	public PayDetails updatePayDetails(@PathVariable ("purchaseId") int purchaseId, 
+	public PayDetails updatePayDetails(@PathVariable ("purchaseId") Long purchaseId, 
 			@RequestBody PayDetails payDetails){
-		return payDetailsService.updatePayDetails(purchaseId, Double.valueOf(payDetails.getAmount()));	
+		return payDetailsService.updatePayDetails(purchaseId, payDetails.getAmount());
+		
 	}
 		
 	//DELETE
 	@DeleteMapping (path="{purchaseId}")
-	public PayDetails deletePayDetails(@PathVariable ("purchaseId") int purchaseId){
+	public PayDetails deletePayDetails(@PathVariable ("purchaseId") Long purchaseId){
 		return payDetailsService.deletePayDetails(purchaseId);
 	}
 }
