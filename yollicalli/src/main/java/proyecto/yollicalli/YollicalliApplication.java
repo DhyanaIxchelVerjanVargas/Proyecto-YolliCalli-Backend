@@ -9,5 +9,4 @@ public class YollicalliApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(YollicalliApplication.class, args);
 	}//main
-
 }

@@ -1,6 +1,6 @@
 package proyecto.yollicalli.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +27,13 @@ private final PayMethodsService payMethodsService;
 	}
 
 	@GetMapping
-	public ArrayList<PaymentMethod> getPayMethods() {
+	public List<PaymentMethod> getAllPayMethods() {
 		return payMethodsService.getAllPayMethods();
+	}
+	
+	@GetMapping (path="{purchaseId}")
+	public PaymentMethod getPaymentMethod(@PathVariable ("purchaseId") Long purchaseId) {
+		return payMethodsService.getPaymentMethod(purchaseId);
 	}
 	
 	//POST
@@ -39,14 +44,14 @@ private final PayMethodsService payMethodsService;
 	
 	//PUT
 	@PutMapping (path="{purchaseId}")
-	public PaymentMethod updatePaymentMethod(@PathVariable ("purchaseId") int purchaseId, 
+	public PaymentMethod updatePaymentMethod(@PathVariable ("purchaseId") Long purchaseId, 
 			@RequestBody PaymentMethod payMethods){
 		return payMethodsService.updatePaymentMethod(purchaseId, payMethods.getNombreMetodo());	
 	}
 		
 	//DELETE
 	@DeleteMapping (path="{purchaseId}")
-	public PaymentMethod deletePaymentMethod(@PathVariable ("purchaseId") int purchaseId){
+	public PaymentMethod deletePaymentMethod(@PathVariable ("purchaseId") Long purchaseId){
 		return payMethodsService.deletePaymentMethod(purchaseId);
 	}
 	

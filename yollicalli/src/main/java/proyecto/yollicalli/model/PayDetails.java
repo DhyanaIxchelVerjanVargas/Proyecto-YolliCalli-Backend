@@ -1,12 +1,28 @@
 package proyecto.yollicalli.model;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+// POJO Plain Old Java Object
+
+@Entity
+@Table(name="detalle_pago")
 public class PayDetails {
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name="id", unique=true, nullable=false)
+	private Long id;
+	@Column(nullable=false)
 	private double amount;
-	private int id;
-	private static int total = 0;
+	private static Long total = (long) 0;
 	
 	public PayDetails(double amount) {
-		super();
 		this.amount = amount;
 		PayDetails.total++;
 		id= PayDetails.total;
@@ -25,19 +41,19 @@ public class PayDetails {
 		this.amount = amount;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public static int getTotal() {
+	public static Long getTotal() {
 		return total;
 	}
 
-	public static void setTotal(int total) {
+	public static void setTotal(Long total) {
 		PayDetails.total = total;
 	}
 

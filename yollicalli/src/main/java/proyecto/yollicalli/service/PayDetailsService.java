@@ -1,71 +1,82 @@
 package proyecto.yollicalli.service;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import proyecto.yollicalli.dto.ChangePayDetails;
 import proyecto.yollicalli.model.PayDetails;
+import proyecto.yollicalli.repository.PayDetailsRepository;
 
 @Service
 public class PayDetailsService {
 
-	public final ArrayList<PayDetails> list = new ArrayList<PayDetails>();
+	public final PayDetailsRepository payDetailsRepository;
 	
-	public PayDetailsService() {
-		list.add( new PayDetails(49.90));
-		list.add( new PayDetails(231.00));
-		list.add( new PayDetails(1225.90));
-		list.add( new PayDetails(779.00));		
-		}
-	
-	public ArrayList<PayDetails> getAllPayDetails() {
-		// TODO Auto-generated method stub
-		return list;
+	@Autowired
+	public PayDetailsService(PayDetailsRepository payDetailsRepository) {
+		this.payDetailsRepository = payDetailsRepository;
 	}
+	
+	public List<PayDetails> getAllPayDetails() {
+		// TODO Auto-generated method stub
+		return payDetailsRepository.findAll();
+	}//getAllPayDetails
 
-	public PayDetails getPayDetails(int purchaseId) {
+	public PayDetails getPayDetails(Long purchaseId) {
 		// TODO Auto-generated method stub
-		PayDetails tmpPayment = null;
-		for (PayDetails payDetails : list) {
-			if (purchaseId == payDetails.getId()) {
-				tmpPayment = payDetails;
-				break;
-			}
-		}
-		return tmpPayment;
-	}
+		return payDetailsRepository.findById(purchaseId).orElseThrow(
+				()-> new IllegalArgumentException("El pago con el id ["+purchaseId+"] no existe.")
+				);
+	}//getPayDetails(Single)
 	
 	public PayDetails addPayDetails(PayDetails payDetails) {
 		// TODO Auto-generated method stub
-		PayDetails tmpPayment = null;
-		if (list.add(payDetails)) {
-			tmpPayment = payDetails;
+		Optional<PayDetails> tmpPayment = payDetailsRepository.findById(payDetails.getId());
+		if (tmpPayment.isEmpty()) {
+			return payDetailsRepository.save(payDetails);
+		}else {
+			System.out.println("Ya existe el pago con la id ["+payDetails.getId()+"]");
+			return null;
 		}
-		return tmpPayment;
-	}
-
-	public PayDetails deletePayDetails(int purchaseId) {
+	}//addPayDetails
+	
+	public PayDetails deletePayDetails(Long purchaseId) {
 		// TODO Auto-generated method stub
 		PayDetails tmpPayment = null;
-		for (PayDetails payDetails : list) {
-			if (purchaseId == payDetails.getId()) {
-				tmpPayment = payDetails;
-				list.remove(payDetails);
-				break;
-			}
+		if (payDetailsRepository.existsById(purchaseId)) {
+			tmpPayment =  payDetailsRepository.findById(purchaseId).get();
+			payDetailsRepository.deleteById(purchaseId);
 		}
 		return tmpPayment;
-	}
+	}//deleteProduct
 
-	public PayDetails updatePayDetails(int purchaseId, Double amount) {
+	public PayDetails updatePayDetails(Long purchaseId, Double amount) {
 		// TODO Auto-generated method stub
-		PayDetails tmpPayment = null;
-		for (PayDetails payDetails : list) {
-			if (purchaseId == payDetails.getId()) {
-				tmpPayment = payDetails;
-				if (amount!=null) payDetails.setAmount(amount);
-				break;
-			}
+		PayDetails payment = null;
+		if (payDetailsRepository.existsById(purchaseId)) {
+			payment =  payDetailsRepository.findById(purchaseId).get();
+				if(amount.doubleValue() >0) payment.setAmount(amount);
+				payment = payDetailsRepository.save(payment);
+		}//foreach
+		return payment;
+	}
+	
+	public PayDetails updatePayDetails(Long purchaseId, ChangePayDetails changePayDetails) {
+		// TODO Auto-generated method stub
+		PayDetails tmpPayment=null;
+		if(payDetailsRepository.existsById(purchaseId)) {
+			tmpPayment= payDetailsRepository.findById(purchaseId).get();
+			if(tmpPayment.getAmount()==changePayDetails.getAmount()) 
+			{
+				tmpPayment.setAmount(changePayDetails.getNamount());
+				payDetailsRepository.save(tmpPayment);
+			} else{
+				System.out.println("updatePayDetails - La cantidad del pago ["+ tmpPayment.getId() +"] no coincide");
+				tmpPayment = null;
+			};
 		}
 		return tmpPayment;
 	}
