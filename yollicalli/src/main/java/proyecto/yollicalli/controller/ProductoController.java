@@ -1,6 +1,6 @@
 package proyecto.yollicalli.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,19 +18,18 @@ import proyecto.yollicalli.service.ProductoService;
 public class ProductoController {
 	private final ProductoService productoService;
 	@Autowired
-	
-	@GetMapping
-	public ArrayList<Producto> getProducts() {
-		return productoService.getAllProductos();
-	}
-	
 	public ProductoController(ProductoService productoService) {
 		this.productoService = productoService;
 	}
 	
+	@GetMapping
+	public List<Producto> getProducts() {
+		return productoService.getAllProductos();
+	}
+	
 	//GET
 	@GetMapping(path="{prodId}")
-	public Producto getProduto(@PathVariable("prodId") int prodId) {
+	public Producto getProduto(@PathVariable("prodId") Long prodId) {
 		return productoService.getProducto(prodId);
 	}
 	

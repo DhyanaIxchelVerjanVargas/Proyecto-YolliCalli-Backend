@@ -1,19 +1,37 @@
 package proyecto.yollicalli.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="productos")
 public class Producto {
-	private int idProducto;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="idProducto", unique=true, nullable=false)
+	private Long idProducto;
+	@Column(nullable=false)
 	private String nombreProducto;
-	private int idCategoria;
+	@Column(nullable=false)
+	private Long idCategoria;
+	@Column(nullable=false)
 	private String descripcion;
+	@Column(nullable=false)
 	private double precio;
+	@Column(nullable=false)
 	private String imagen;
+	@Column(nullable=false)
 	private int destacado;
+	@Column(nullable=false)
 	private int cantidad;
+	@Column(nullable=true)
 	private String talla;
-	private static int total = 0;
 	
-	public Producto(String nombreProducto, int idCategoria, String descripcion, double precio, String imagen,
+	public Producto(String nombreProducto, Long idCategoria, String descripcion, double precio, String imagen,
 			int destacado,String talla ,int cantidad) {
 		super();
 		this.nombreProducto = nombreProducto;
@@ -24,21 +42,21 @@ public class Producto {
 		this.destacado = destacado;
 		this.cantidad = cantidad;
 		this.talla = talla; 
-		Producto.total++;
-		idProducto = Producto.total;
 	}
 	
 	public Producto() {
-		Producto.total++;
-		idProducto = Producto.total;
 	}
 	
-	public int getIdProducto() {
+	public Long getIdProducto() {
 		return idProducto;
 	}
 
-	public int getIdCategoria() {
+	public Long getIdCategoria() {
 		return idCategoria;
+	}
+	
+	public void setIdCategoria(Long idCategoria) {
+		this.idCategoria = idCategoria;
 	}
 
 	public String getNombreProducto() {
