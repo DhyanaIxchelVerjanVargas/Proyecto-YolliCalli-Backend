@@ -14,10 +14,10 @@ public class Categorias {
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		@Column(name="idCategoria", unique=true, nullable=false)
-        private int idCategoria;
+        private Long idCategoria;
 		@Column(nullable=false)
         private String nombreCategoria;
-		public Categorias(int idCategoria, String nombreCategoria) {
+		public Categorias(Long idCategoria, String nombreCategoria) {
 			super();
 			this.idCategoria = idCategoria;
 			this.nombreCategoria = nombreCategoria;
@@ -34,7 +34,7 @@ public class Categorias {
 			this.nombreCategoria = nombreCategoria;
 		}
 
-		public int getIdCategoria() {
+		public Long getIdCategoria() {
 			return idCategoria;
 		}
 
