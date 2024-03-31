@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import proyecto.yollicalli.dto.CambiarContrasenia;
 import proyecto.yollicalli.model.Usuario;
 import proyecto.yollicalli.service.UserService;
 
@@ -48,6 +49,10 @@ public class UserController {
 	@PutMapping(path="{userId}")
 	public Usuario updateUser(@PathVariable("userId") Long userId,
 			@RequestBody Usuario usuario) {
-		return userService.updateUser(userId, usuario.getNombre(), usuario.getCorreo(), usuario.getTelefono(), usuario.getContrasenia());
+		return userService.updateUser(userId, usuario.getNombre(), usuario.getTelefono(), usuario.getFoto());
+	}
+	@PutMapping(path="password/{userId}")
+	public Usuario updateUserPassword(@PathVariable ("userId") Long userId, @RequestBody CambiarContrasenia changePassword) {
+		return userService.updateUserPassword(userId, changePassword);
 	}
 }

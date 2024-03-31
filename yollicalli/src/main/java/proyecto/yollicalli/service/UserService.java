@@ -2,9 +2,11 @@ package proyecto.yollicalli.service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import proyecto.yollicalli.dto.CambiarContrasenia;
 import proyecto.yollicalli.model.Usuario;
 import proyecto.yollicalli.repository.UserRepository;
 
@@ -58,29 +60,48 @@ public class UserService {
 	}
 
 	public Usuario addUser(Usuario usuario) {
-		Usuario tmpUsuario = null;
+// Usuario tmpUsuario = null;
 //		if(list.add(usuario)){
 //			tmpUsuario=usuario;
 //		}
-		userRepository.save(usuario);
-		return tmpUsuario;
+		// userRepository.save(usuario);
+		// return tmpUsuario;
+
+		Optional<Usuario> tmpUsuario = userRepository.findByCorreo(usuario.getCorreo());
+		if (tmpUsuario.isEmpty()) {
+			return userRepository.save(usuario);
+		}else{
+			System.out.println("El usuario con el email [" + usuario.getCorreo() + "] ya existe.");
+			return null;
+		}
 	}
 
 
 
-	public Usuario updateUser(Long userId, String nombre, String correo, String telefono, String contrasenia) {
+	public Usuario updateUser(Long userId, String nombre, String telefono, String foto) {
 		Usuario tmpUsuario = null;
 		if(userRepository.existsById(userId)) {
 			tmpUsuario=userRepository.findById(userId).get();
 				if (nombre.length()!=0) tmpUsuario.setNombre(nombre);
-				if (correo.length()!=0) tmpUsuario.setCorreo(correo);
 				if (telefono.length()!=0) tmpUsuario.setTelefono(telefono);
-				if (contrasenia.length()!=0) tmpUsuario.setContrasenia(contrasenia);
+				if (foto.length()!=0) tmpUsuario.setFoto(foto);
 				userRepository.save(tmpUsuario);
 			}
-		
 		return tmpUsuario;
 	}
+public Usuario updateUserPassword(Long userId, CambiarContrasenia changePassword){
+	Usuario tmpUsuario = null;
+	if (userRepository.existsById(userId)) {
+		tmpUsuario = userRepository.findById(userId).get();
+		if (tmpUsuario.getContrasenia().equals(changePassword.getContrasenia())) {
+			tmpUsuario.setContrasenia(changePassword.getNcontrasenia());
+			userRepository.save(tmpUsuario);
+		} else{
+			System.out.println("UpdateUser - la contraseña del usuario [" + tmpUsuario.getId() + "] no coincide");
+		}
+	}
+	return tmpUsuario;
+}
 }
 
 //	public User updateUser(int userId, String name, String email, String phone, String password) {
