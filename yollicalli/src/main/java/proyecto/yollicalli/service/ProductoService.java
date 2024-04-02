@@ -130,5 +130,17 @@ public class ProductoService {
     		return null;
     	}
     }//addProducto
+    
+    public List<Producto> getProductsDestacados(List<Producto> productos) {
+        List<Producto> productosDestacados = new ArrayList<>();
+
+        for (Producto producto : productos) {
+            if(producto.getDestacado() == 1) {
+            	productosDestacados.add(producto);
+            }
+        }
+
+        return productosDestacados;
+    }//filtrarCategorias
 
 }

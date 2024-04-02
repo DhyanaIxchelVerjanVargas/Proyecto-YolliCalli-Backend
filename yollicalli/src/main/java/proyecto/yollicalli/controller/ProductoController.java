@@ -33,6 +33,13 @@ public class ProductoController {
 		return productoService.getProducto(prodId);
 	}
 	
+	@GetMapping(path="destacados")
+	public List<Producto> getProductsDestacados() {
+		List<Producto> tmpProductos =  null;
+		tmpProductos = productoService.getAllProductos();
+		return productoService.getProductsDestacados(tmpProductos);
+	}
+	
 	//Post
 	@PostMapping
 	public Producto addProducto(@RequestBody Producto producto) {
