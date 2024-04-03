@@ -125,11 +125,39 @@ public class ProductoService {
     	if(tmpProducto.isEmpty()) {
     		return productoRepository.save(producto);
     	}else {
-    		System.out.println("Ya existe el producto con el nombre ["
+    		System.out.println("Ya "
+    				+ "existe el producto con el nombre ["
     				+producto.getNombreProducto() + "]");
     		return null;
     	}
     }//addProducto
+    
+    public Producto updateProducto(Long prodID, String nombre, Long idCategoria,String descripcion, Double precio,
+    								String urlImgen, int destacado, int cantidad, String talla) {
+    	Producto tmpProd = null;
+    	if(productoRepository.existsById(Long.valueOf(prodID))) {
+    		tmpProd = productoRepository.findById(Long.valueOf(prodID)).get();
+    		if(nombre.length() != 0 ) tmpProd.setNombreProducto(nombre);
+    		if(idCategoria.longValue() > 0 ) tmpProd.setIdCategoria(idCategoria);
+    		if(descripcion.length() != 0 ) tmpProd.setDescripcion(descripcion);
+    		if(precio.doubleValue() > 0 ) tmpProd.setPrecio(precio);
+    		if(urlImgen.length() > 0) tmpProd.setImagen(urlImgen);
+    		tmpProd.setDestacado(destacado);
+    		if(cantidad > 0) tmpProd.setCantidad(cantidad);
+    		if(talla.length() > 0 ) tmpProd.setTalla(talla);
+    		productoRepository.save(tmpProd);
+    	}
+    	return tmpProd;
+    }
+    
+    public Producto deleteProducto(Long prodId) {
+    	Producto tmpProd = null;
+    	if(productoRepository.existsById(prodId)) {
+    		tmpProd = productoRepository.findById(prodId).get();
+    		productoRepository.deleteById(prodId);
+    	}
+    	return tmpProd;
+    }// deleteProducto
     
     public List<Producto> getProductsDestacados(List<Producto> productos) {
         List<Producto> productosDestacados = new ArrayList<>();
@@ -141,6 +169,6 @@ public class ProductoService {
         }
 
         return productosDestacados;
-    }//filtrarCategorias
+    }//filtrarDestacados
 
 }
