@@ -21,7 +21,7 @@ public class Usuario {
     private String correo;
     @Column(nullable = false)
     private String telefono;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String foto;
     @Column(nullable = false)
     private String contrasenia;
