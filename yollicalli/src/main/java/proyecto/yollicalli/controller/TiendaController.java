@@ -37,25 +37,25 @@ public class TiendaController {
 		if(ordenPrecio != null) {
 			tmpProductos=productoService.ordenProductosPrecio(tmpProductos,ordenPrecio);
 		}else{
-			System.out.println("no se aplico filtro");
+			System.out.println("no se aplico filtro de ordenar por precio");
 		}
 		
 		if(ordenNombre != null) {
 			tmpProductos=productoService.ordenProductosNombre(tmpProductos,ordenNombre);
 		}else {
-			System.out.println("no se aplico filtro");
+			System.out.println("no se aplico filtro de ordenar por nombre");
 		}
 		
 		if(categorias != null) {
 			tmpProductos = productoService.filtrarCategorias(tmpProductos, categorias);
 		}else {
-			System.out.println("no se aplico filtro");
+			System.out.println("no se aplico filtro de seleccionar por categorias");
 		}
 		
 		if(precioMenor != null && precioMayor != null) {
 			tmpProductos = productoService.filtrarPrecios(tmpProductos, precioMenor, precioMayor);
 		}else {
-			System.out.println("no se aplico filtro");
+			System.out.println("no se aplico filtro de rango de precio");
 		}
 		
 		if(buscar != null) {
